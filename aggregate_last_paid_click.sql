@@ -56,7 +56,7 @@ ads as (
 )
 select
     to_char(visit_date, 'YYYY-MM-DD') as visit_date,
-    count(*) as visitors_count,
+    count(visitor_id) as visitors_count,
     tab1.utm_source,
     tab1.utm_medium,
     tab1.utm_campaign,

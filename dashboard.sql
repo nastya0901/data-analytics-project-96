@@ -62,7 +62,7 @@ select
     tab1.utm_medium,
     tab1.utm_campaign,
     ads.total_cost,
-    count(*) as visitors_count,
+    count(visitor_id) as visitors_count,
     count(lead_id) as lead_count,
     count(case when status_id = 142 then 1 end) as purchases_count,
     sum(case when status_id = 142 then amount end) as revenue
