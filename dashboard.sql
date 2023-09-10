@@ -17,7 +17,7 @@ with tab as (
     where
         medium in (
             'cpc', 'cpm', 'cpa', 'youtube', 'cpp',
-            'tg'
+            'tg', 'social'
         )
 ),
 tab1 as (
@@ -124,7 +124,6 @@ case when sum (coalesce(total_cost,0)) = 0 then 0.00 else round(sum(coalesce(rev
 from dashboard
 where cast(visit_date as date) between '20230601' and '20230630'
 group by 1;
-
 --8  основные метрики за период:
 select
 case when sum (coalesce(visitors_count,0)) = 0 then 0.00 else round(sum(coalesce(total_cost,0))/sum(coalesce(visitors_count,0)),2) end as cpu,

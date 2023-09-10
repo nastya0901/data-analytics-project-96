@@ -17,7 +17,7 @@ with tab as (
     where
         medium in (
             'cpc', 'cpm', 'cpa', 'youtube', 'cpp',
-            'tg'
+            'tg', 'social'
         )
 )
 select
