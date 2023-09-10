@@ -6,11 +6,13 @@ with tab as (
         s.medium as utm_medium,
         s.campaign as utm_campaign,
         l.lead_id,
-        created_at,
+        l.created_at,
         l.amount,
         l.closing_reason,
         l.status_id,
-        rank() over (partition by s.visitor_id order by s.visit_date desc) as rnk
+        rank()
+            over (partition by s.visitor_id order by s.visit_date desc)
+        as rnk
     from sessions as s
     left join leads as l
         on s.visitor_id = l.visitor_id and s.visit_date < l.created_at
@@ -20,6 +22,7 @@ with tab as (
             'tg', 'social'
         )
 ),
+
 tab1 as (
     select
         visitor_id,
@@ -35,6 +38,7 @@ tab1 as (
     from tab
     where rnk = 1
 ),
+
 ads as (
     select
         to_char(campaign_date, 'YYYY-MM-DD') as cd,
@@ -54,6 +58,7 @@ ads as (
     from ya_ads
     group by 1, 2, 3, 4
 )
+
 select
     to_char(visit_date, 'YYYY-MM-DD') as visit_date,
     count(visitor_id) as visitors_count,
@@ -76,5 +81,3 @@ order by
     sum(case when status_id = 142 then amount else 0 end) desc,
     visit_date, visitors_count desc,
     utm_source asc, utm_medium asc, utm_campaign asc;
-     
-    
