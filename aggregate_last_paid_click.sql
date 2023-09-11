@@ -76,7 +76,7 @@ left join ads
         and tab1.utm_source = ads.utm_source
         and tab1.utm_medium = ads.utm_medium
         and tab1.utm_campaign = ads.utm_campaign
-group by 1, 3, 4, 5, 6
+group by 1, 2, 3, 4, 5
 order by
     9 desc,
     tab1.visit_date, 6 desc,

@@ -109,13 +109,17 @@ select
 from dashboard
 group by 1;
 --5 траты по разным каналам в динамике
-select case when extract (day from cast(visit_date as date)) between 1 and 10 then 1
-when extract (day from cast(visit_date as date)) between 11 and 20 then 2
-else 3 end as MonthDecade,
-sum(total_cost),utm_source
+select
+    case
+        when extract(day from cast(visit_date as date)) between 1 and 10 then 1
+        when extract(day from cast(visit_date as date)) between 11 and 20 then 2
+        else 3
+    end as monthdecade,
+    sum(total_cost),
+    utm_source
 from dashboard
-group by 1,3
-having sum(total_cost)>0;
+group by 1, 3
+having sum(total_cost) > 0;
 --6 окупаемость каналов
 select
     utm_source,
