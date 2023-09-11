@@ -10,12 +10,14 @@ with tab as (
         l.amount,
         l.closing_reason,
         l.status_id,
-        rank() over (partition by s.visitor_id order by s.visit_date desc) as rnk
+        rank() 
+        over (partition by s.visitor_id order by s.visit_date desc)
+        as rnk
     from sessions as s
     left join leads as l
         on s.visitor_id = l.visitor_id and s.visit_date < l.created_at
     where
-        medium in (
+        s.medium in (
             'cpc', 'cpm', 'cpa', 'youtube', 'cpp',
             'tg', 'social'
         )

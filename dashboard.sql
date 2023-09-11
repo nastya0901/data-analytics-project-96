@@ -55,6 +55,7 @@ ads as (
     from ya_ads
     group by 1, 2, 3, 4
 ),
+
 dashboard  as (
 select
     cast(to_char(visit_date, 'YYYY-MM-DD') as date) as visit_date,
@@ -114,25 +115,77 @@ select
 from dashboard
 group by 1
 having sum(total_cost)>0 or sum(revenue)>0;
-
 --7  сновные метрики по дням:
 select
-cast(visit_date as date), 
-case when sum (coalesce(visitors_count,0)) = 0 then 0.00 else round(sum(coalesce(total_cost,0))/sum(coalesce(visitors_count,0)),2) end as cpu,
-case when sum (coalesce(lead_count,0)) = 0 then 0.00 else round(sum(coalesce(total_cost,0)) /sum(coalesce(lead_count,0)),2) end as cpl,
-case when sum (coalesce(purchases_count,0)) = 0 then 0.00 else round(sum( coalesce(total_cost,0))/sum(coalesce(purchases_count,0)),2) end as cppu,
-case when sum (coalesce(total_cost,0)) = 0 then 0.00 else round(sum(coalesce(revenue,0) - coalesce(total_cost,0)) / sum(coalesce(total_cost,0)),2) * 100.00 end as roi
+    cast(visit_date as date),
+    case
+        when sum(coalesce(visitors_count, 0)) = 0 then 0.00 else
+            round(
+                sum(coalesce(total_cost, 0)) / sum(coalesce(visitors_count, 0)),
+                2
+            )
+    end as cpu,
+    case
+        when sum(coalesce(lead_count, 0)) = 0 then 0.00 else
+            round(
+                sum(coalesce(total_cost, 0)) / sum(coalesce(lead_count, 0)), 2
+            )
+    end as cpl,
+    case
+        when sum(coalesce(purchases_count, 0)) = 0 then 0.00 else
+            round(
+                sum(coalesce(total_cost, 0))
+                / sum(coalesce(purchases_count, 0)),
+                2
+            )
+    end as cppu,
+    case
+        when sum(coalesce(total_cost, 0)) = 0 then 0.00 else
+            round(
+                sum(coalesce(revenue, 0) - coalesce(total_cost, 0))
+                / sum(coalesce(total_cost, 0)),
+                2
+            )
+            * 100.00
+    end as roi
 from dashboard
 where cast(visit_date as date) between '20230601' and '20230630'
 group by 1;
 --8  основные метрики за период:
 select
-case when sum (coalesce(visitors_count,0)) = 0 then 0.00 else round(sum(coalesce(total_cost,0))/sum(coalesce(visitors_count,0)),2) end as cpu,
-case when sum (coalesce(lead_count,0)) = 0 then 0.00 else round(sum(coalesce(total_cost,0)) /sum(coalesce(lead_count,0)),2) end as cpl,
-case when sum (coalesce(purchases_count,0)) = 0 then 0.00 else round(sum( coalesce(total_cost,0))/sum(coalesce(purchases_count,0)),2) end as cppu,
-case when sum (coalesce(total_cost,0)) = 0 then 0.00 else round(sum(coalesce(revenue,0) - coalesce(total_cost,0)) / sum(coalesce(total_cost,0)),2) * 100.00 end as roi
+    case
+        when sum(coalesce(visitors_count, 0)) = 0 then 0.00 else
+            round(
+                sum(coalesce(total_cost, 0)) / sum(coalesce(visitors_count, 0)),
+                2
+            )
+    end as cpu,
+    case
+        when sum(coalesce(lead_count, 0)) = 0 then 0.00 else
+            round(
+                sum(coalesce(total_cost, 0)) / sum(coalesce(lead_count, 0)), 2
+            )
+    end as cpl,
+    case
+        when sum(coalesce(purchases_count, 0)) = 0 then 0.00 else
+            round(
+                sum(coalesce(total_cost, 0))
+                / sum(coalesce(purchases_count, 0)),
+                2
+            )
+    end as cppu,
+    case
+        when sum(coalesce(total_cost, 0)) = 0 then 0.00 else
+            round(
+                sum(coalesce(revenue, 0) - coalesce(total_cost, 0))
+                / sum(coalesce(total_cost, 0)),
+                2
+            )
+            * 100.00
+    end as roi
 from dashboard
 where cast(visit_date as date) between '20230601' and '20230630'
+
 */
 
 
