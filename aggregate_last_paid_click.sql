@@ -22,6 +22,7 @@ with tab as (
             'tg', 'social'
         )
 ),
+
 tab1 as (
     select
         visitor_id,
@@ -37,6 +38,7 @@ tab1 as (
     from tab
     where rnk = 1
 ),
+
 ads as (
     select
         to_char(campaign_date, 'YYYY-MM-DD') as cd,
@@ -56,16 +58,17 @@ ads as (
     from ya_ads
     group by 1, 2, 3, 4
 )
+
 select
-    to_char(tab1.visit_date, 'YYYY-MM-DD') as visit_date,
     tab1.utm_source,
     tab1.utm_medium,
     tab1.utm_campaign,
     ads.total_cost,
-    count(visitor_id) as visitors_count,
-    count(lead_id) as leads_count,
-    count(case when status_id = 142 then 1 end) as purchases_count,
-    sum(case when status_id = 142 then amount end) as revenue
+    to_char(tab1.visit_date, 'YYYY-MM-DD') as visit_date,
+    count(tab1.visitor_id) as visitors_count,
+    count(tab1.lead_id) as leads_count,
+    count(case when tab1.status_id = 142 then 1 end) as purchases_count,
+    sum(case when tab1.status_id = 142 then tab1.amount end) as revenue
 from tab1
 left join ads
     on
@@ -75,6 +78,6 @@ left join ads
         and tab1.utm_campaign = ads.utm_campaign
 group by 1, 3, 4, 5, 6
 order by
-    sum(case when status_id = 142 then amount else 0 end) desc,
-    tab1.visit_date, visitors_count desc,
-    utm_source asc, utm_medium asc, utm_campaign asc;
+    sum(case when tab1.status_id = 142 then tab1.amount else 0 end) desc,
+    tab1.visit_date, tab1.visitors_count desc,
+    tab1.utm_source asc, tab1.utm_medium asc, tab1.utm_campaign asc;
