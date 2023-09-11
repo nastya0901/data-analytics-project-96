@@ -11,18 +11,17 @@ with tab as (
         l.closing_reason,
         l.status_id,
         rank()
-            over (partition by s.visitor_id order by s.visit_date desc)
+        over (partition by s.visitor_id order by s.visit_date desc)
         as rnk
     from sessions as s
     left join leads as l
         on s.visitor_id = l.visitor_id and s.visit_date < l.created_at
     where
-        medium in (
+        s.medium in (
             'cpc', 'cpm', 'cpa', 'youtube', 'cpp',
             'tg', 'social'
         )
 ),
-
 tab1 as (
     select
         visitor_id,
@@ -38,7 +37,6 @@ tab1 as (
     from tab
     where rnk = 1
 ),
-
 ads as (
     select
         to_char(campaign_date, 'YYYY-MM-DD') as cd,
@@ -58,14 +56,13 @@ ads as (
     from ya_ads
     group by 1, 2, 3, 4
 )
-
 select
-    to_char(visit_date, 'YYYY-MM-DD') as visit_date,
-    count(visitor_id) as visitors_count,
+    to_char(tab1.visit_date, 'YYYY-MM-DD') as visit_date,
     tab1.utm_source,
     tab1.utm_medium,
     tab1.utm_campaign,
     ads.total_cost,
+    count(visitor_id) as visitors_count,
     count(lead_id) as leads_count,
     count(case when status_id = 142 then 1 end) as purchases_count,
     sum(case when status_id = 142 then amount end) as revenue
@@ -79,5 +76,5 @@ left join ads
 group by 1, 3, 4, 5, 6
 order by
     sum(case when status_id = 142 then amount else 0 end) desc,
-    visit_date, visitors_count desc,
+    tab1.visit_date, visitors_count desc,
     utm_source asc, utm_medium asc, utm_campaign asc;
