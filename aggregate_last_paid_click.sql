@@ -48,7 +48,7 @@ ads as (
         sum(daily_spent) as total_cost
     from vk_ads
     group by 1, 2, 3, 4
-    union
+    union all
     select
         to_char(campaign_date, 'YYYY-MM-DD') as cd,
         utm_source,
@@ -79,5 +79,5 @@ left join ads
 group by 1, 3, 4, 5, 6
 order by
     9 desc,
-    tab1.visit_date, visitors_count desc,
+    tab1.visit_date, 6 desc,
     tab1.utm_source asc, tab1.utm_medium asc, tab1.utm_campaign asc;

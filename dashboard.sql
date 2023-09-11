@@ -45,7 +45,7 @@ ads as (
         sum(daily_spent) as total_cost
     from vk_ads
     group by 1, 2, 3, 4
-    union
+    union all
     select
         to_char(campaign_date, 'YYYY-MM-DD') as cd,
         utm_source,
@@ -59,7 +59,7 @@ ads as (
 dashboard  as (
 select
     cast(to_char(visit_date, 'YYYY-MM-DD') as date) as visit_date,
-    extract(isodow from visit_date) as visit_weekday, 
+    extract(isodow from visit_date) as visit_weekday,
     tab1.utm_source,
     tab1.utm_medium,
     tab1.utm_campaign,
@@ -94,9 +94,18 @@ sum (lead_count)
 from dashboard
 group by 1;
 --4 конверсия из посетителй в лиды и из лидов в оплаты
-select utm_source,
-round(sum (lead_count)/sum (visitors_count)*100.00,2) as conv1,
-case when sum (coalesce(lead_count,0)) = 0 then 0.00 else round(sum (coalesce(purchases_count,0))/sum (coalesce(lead_count,0))*100.00,2) end as conv2
+select
+    utm_source,
+    round(sum(lead_count) / sum(visitors_count) * 100.00, 2) as conv1,
+    case
+        when sum(coalesce(lead_count, 0)) = 0 then 0.00 else
+            round(
+                sum(coalesce(purchases_count, 0))
+                / sum(coalesce(lead_count, 0))
+                * 100.00,
+                2
+            )
+    end as conv2
 from dashboard
 group by 1;
 --5 траты по разным каналам в динамике
@@ -149,7 +158,6 @@ select
             * 100.00
     end as roi
 from dashboard
-where cast(visit_date as date) between '20230601' and '20230630'
 group by 1;
 --8  основные метрики за период:
 select
@@ -184,10 +192,4 @@ select
             * 100.00
     end as roi
 from dashboard
-where cast(visit_date as date) between '20230601' and '20230630'
-
 */
-
-
-     
-    
