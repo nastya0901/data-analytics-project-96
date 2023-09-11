@@ -78,6 +78,6 @@ left join ads
         and tab1.utm_campaign = ads.utm_campaign
 group by 1, 3, 4, 5, 6
 order by
-    sum(case when tab1.status_id = 142 then tab1.amount else 0 end) desc,
+    9 desc,
     tab1.visit_date, tab1.visitors_count desc,
     tab1.utm_source asc, tab1.utm_medium asc, tab1.utm_campaign asc;

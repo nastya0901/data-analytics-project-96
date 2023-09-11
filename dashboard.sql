@@ -1,3 +1,4 @@
+/*
 with tab as (
     select
         s.visitor_id,
@@ -75,7 +76,7 @@ left join ads
         and tab1.utm_campaign = ads.utm_campaign
 group by 1, 2, 3, 4, 5, 6
 )
-/*- 1 количество посетителей на сайте
+-- 1 количество посетителей на сайте
 select visit_date,
 sum (visitors_count)
 from dashboard

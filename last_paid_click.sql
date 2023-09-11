@@ -1,16 +1,16 @@
 with tab as (
     select
         s.visitor_id,
-        visit_date,
-        source as utm_source,
-        medium as utm_medium,
-        campaign as utm_campaign,
-        lead_id,
-        created_at,
-        amount,
-        closing_reason,
-        status_id,
-        rank() over (partition by s.visitor_id order by visit_date desc) as rnk
+        s.visit_date,
+        s.source as utm_source,
+        s.medium as utm_medium,
+        s.campaign as utm_campaign,
+        l.lead_id,
+        l.created_at,
+        l.amount,
+        l.closing_reason,
+        l.status_id,
+        rank() over (partition by s.visitor_id order by s.visit_date desc) as rnk
     from sessions as s
     left join leads as l
         on s.visitor_id = l.visitor_id and s.visit_date < l.created_at
@@ -20,6 +20,7 @@ with tab as (
             'tg', 'social'
         )
 )
+
 select
     visitor_id,
     visit_date,
