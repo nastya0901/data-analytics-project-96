@@ -11,7 +11,7 @@ with tab as (
         amount,
         closing_reason,
         status_id,
-        rank() over (partition by s.visitor_id order by visit_date desc) as rnk
+        row_number() over (partition by s.visitor_id order by visit_date desc) as rnk
     from sessions as s
     left join leads as l
         on s.visitor_id = l.visitor_id and s.visit_date < l.created_at

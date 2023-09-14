@@ -10,7 +10,7 @@ with tab as (
         l.amount,
         l.closing_reason,
         l.status_id,
-        rank()
+        row_number()
         over (partition by s.visitor_id order by s.visit_date desc)
         as rnk
     from sessions as s
